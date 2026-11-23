@@ -47,7 +47,15 @@
  document.getElementById('copy-upi').onclick=async()=>{try{await navigator.clipboard.writeText(upi);document.getElementById('copy-upi').textContent='Copied!';}catch(e){document.getElementById('copy-upi').textContent=upi;}};
  const name=selected?selected.name:'Wishora order';
  const amt=selected?selected.price:'';
- document.getElementById('upi-app').href='upi://pay?pa='+encodeURIComponent(upi)+'&pn='+encodeURIComponent('Wishora')+(amt?'&am='+amt:'')+'&cu=INR&tn='+encodeURIComponent(name);
+ const upiLink =
+  'upi://pay?pa=' + encodeURIComponent(upi) +
+  '&pn=' + encodeURIComponent('Wishora') +
+  (amt ? '&am=' + amt : '') +
+  '&cu=INR&tn=' + encodeURIComponent(name);
+
+const upiButton = document.getElementById('upi-app');
+upiButton.href = upiLink;
+upiButton.setAttribute('target', '_self');
  document.getElementById('copy-reference').onclick=async()=>{const v=document.getElementById('utr').value.trim();if(!v){alert('Enter the transaction reference first.');return;}try{await navigator.clipboard.writeText(v);alert('Reference copied. Send it using the contact method in your order confirmation.');}catch(e){alert('Reference: '+v);}};
 })();
 </script>
