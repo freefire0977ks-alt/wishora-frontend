@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Wishora manual UPI payment instructions">
+<title>Complete your payment | Wishora</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+.pay-wrap{max-width:760px;margin:56px auto;padding:0 20px}.pay-card{background:#fff;border:1px solid #eadfe3;border-radius:24px;padding:clamp(22px,5vw,42px);box-shadow:0 18px 50px #5a34400d}.pay-qr{display:block;width:min(100%,360px);height:auto;margin:22px auto;border-radius:16px;border:1px solid #f0e5d7}.pay-amount{font-size:clamp(34px,8vw,48px);font-weight:800;color:#b14d70;text-align:center;margin:8px 0}.pay-id{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fff7f8;border:1px dashed #d8a6b7;border-radius:14px;padding:14px;margin:16px 0}.pay-id code{font-size:16px;font-weight:700;overflow-wrap:anywhere}.pay-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.pay-note{font-size:14px;color:#766b70;line-height:1.65}.pay-field{display:block;width:100%;padding:14px;border:1px solid #dfd2d8;border-radius:12px;font:inherit;margin:8px 0 16px}.pay-status{background:#fff7e9;border-radius:12px;padding:14px;color:#795a2b;font-size:14px}
+</style>
+</head>
+<body>
+<div class="announcement">WISHORA • SECURE YOUR ORDER</div>
+<header class="nav"><div class="wrap nav-inner"><a class="logo" href="index.html">wishora<span>.</span></a><nav class="nav-links"><a href="index.html">Home</a><a href="pages/pricing.html">Pricing</a><a href="pages/how-it-works.html">How It Works</a></nav><button class="menu-btn">☰</button></div></header>
+<main class="pay-wrap">
+<div class="pay-card">
+<div class="eyebrow" style="text-align:center">ONE LAST STEP</div>
+<h1 style="text-align:center;margin:10px 0">Complete your <em>Wishora payment.</em></h1>
+<p class="lead" style="text-align:center;font-size:16px">Scan the QR code using any supported UPI app, or copy the UPI ID below.</p>
+<div class="pay-amount" id="amount">₹ —</div>
+<p style="text-align:center;color:#776b70" id="package-label">Selected package</p>
+<img class="pay-qr" src="assets/wishora-upi-qr.jpg" alt="Wishora UPI QR code">
+<div class="pay-id"><code id="upi-id">7652007045@fam</code><button class="btn light" type="button" id="copy-upi">Copy UPI ID</button></div>
+<div class="pay-actions"><a class="btn pink" id="upi-app" href="#">Open UPI app</a></div>
+<div class="pay-status" style="margin-top:22px"><strong>Manual verification:</strong> After paying, keep your UPI transaction reference/UTR safe. Your order will be processed only after the payment is manually checked.</div>
+<h3 style="margin-top:26px">Payment reference</h3>
+<label for="utr">Enter your UPI transaction reference / UTR</label>
+<input class="pay-field" id="utr" inputmode="numeric" placeholder="Enter reference after payment">
+<p class="pay-note">This page does not submit or verify payments automatically. Send the reference to Wishora using the contact method provided in your order confirmation. Do not enter your UPI PIN, OTP, or bank password here.</p>
+<p class="pay-note">If the amount or package shown above is incorrect, do not pay. Return to your order form and confirm your selection.</p>
+<div class="pay-actions"><button class="btn light" id="copy-reference" type="button">Copy payment reference</button><a class="btn light" href="https://tally.so/r/9N7ZQ1">Back to order form</a></div>
+</div>
+</main>
+<footer class="footer"><div class="wrap"><div class="copyright">© <span data-year></span> Wishora. Make Every Moment Special.</div></div></footer>
+<script src="assets/site.js"></script>
+<script>
+(function(){
+ const p=new URLSearchParams(location.search);
+ const raw=(p.get('package')||'').toLowerCase();
+ const map={basic:{name:'Basic',price:99},premium:{name:'Premium',price:149},special:{name:'Special',price:199}};
+ const selected=map[raw];
+ const amount=document.getElementById('amount');
+ const label=document.getElementById('package-label');
+ if(selected){amount.textContent='₹'+selected.price;label.textContent=selected.name+' package';}
+ else {amount.textContent='Select amount in your order details';label.textContent='Package not passed from the order form';}
+ const upi='7652007045@fam';
+ document.getElementById('copy-upi').onclick=async()=>{try{await navigator.clipboard.writeText(upi);document.getElementById('copy-upi').textContent='Copied!';}catch(e){document.getElementById('copy-upi').textContent=upi;}};
+ const name=selected?selected.name:'Wishora order';
+ const amt=selected?selected.price:'';
+ document.getElementById('upi-app').href='upi://pay?pa='+encodeURIComponent(upi)+'&pn='+encodeURIComponent('Wishora')+(amt?'&am='+amt:'')+'&cu=INR&tn='+encodeURIComponent(name);
+ document.getElementById('copy-reference').onclick=async()=>{const v=document.getElementById('utr').value.trim();if(!v){alert('Enter the transaction reference first.');return;}try{await navigator.clipboard.writeText(v);alert('Reference copied. Send it using the contact method in your order confirmation.');}catch(e){alert('Reference: '+v);}};
+})();
+</script>
+</body></html>
